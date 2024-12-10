@@ -36,8 +36,8 @@ from .helpers import (
     LIST_QUOTED_ETAG_RE,
     ChainMapProxy,
     ETag,
-    HeadersMixin,
     frozen_dataclass_decorator,
+    HeadersMixin,
     is_expected_content_type,
     parse_http_date,
     reify,
@@ -71,9 +71,9 @@ __all__ = ("BaseRequest", "FileField", "Request")
 
 
 if TYPE_CHECKING:
-    from .web_app import Application
-    from .web_protocol import RequestHandler
     from .web_urldispatcher import UrlMappingMatchInfo
+    from .web_protocol import RequestHandler
+    from .web_app import Application
 
 
 @frozen_dataclass_decorator

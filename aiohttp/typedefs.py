@@ -10,12 +10,17 @@ from typing import (
     Protocol,
     Tuple,
     Union,
+    Sequence
 )
 
 from multidict import CIMultiDict, CIMultiDictProxy, MultiDict, MultiDictProxy, istr
-from yarl import URL, Query as _Query
+from yarl import URL
 
-Query = _Query
+SimpleQuery = Union[str, int, float]
+QueryVariable = Union[SimpleQuery, Sequence[SimpleQuery]]
+Query = Union[
+    None, str, Mapping[str, QueryVariable], Sequence[tuple[str, QueryVariable]]
+]
 
 DEFAULT_JSON_ENCODER = json.dumps
 DEFAULT_JSON_DECODER = json.loads

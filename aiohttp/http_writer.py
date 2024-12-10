@@ -29,8 +29,8 @@ class HttpVersion(NamedTuple):
     minor: int
 
 
-HttpVersion10 = HttpVersion(1, 0)
 HttpVersion11 = HttpVersion(1, 1)
+HttpVersion10 = HttpVersion(1, 0)
 
 
 _T_OnChunkSent = Optional[Callable[[bytes], Awaitable[None]]]
@@ -85,8 +85,8 @@ class StreamWriter(AbstractStreamWriter):
         size = 0
         for chunk in chunks:
             size += len(chunk)
-        self.buffer_size += size
         self.output_size += size
+        self.buffer_size += size
         transport = self._protocol.transport
         if transport is None or transport.is_closing():
             raise ClientConnectionResetError("Cannot write to closing transport")

@@ -12,6 +12,7 @@ from http import HTTPStatus
 from itertools import chain, cycle, islice
 from time import monotonic
 from types import TracebackType
+from . import hdrs, http, payload
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -31,9 +32,9 @@ from typing import (
     Union,
     cast,
 )
-
+from .helpers import (
+frozen_dataclass_decorator)
 import aiohappyeyeballs
-
 from . import hdrs, helpers
 from .abc import AbstractResolver, ResolveResult
 from .client_exceptions import (
@@ -49,8 +50,9 @@ from .client_exceptions import (
     cert_errors,
     ssl_errors,
 )
-from .client_proto import ResponseHandler
 from .client_reqrep import SSL_ALLOWED_TYPES, ClientRequest, Fingerprint
+from .client_proto import ResponseHandler
+from yarl import URL
 from .helpers import (
     _SENTINEL,
     ceil_timeout,
@@ -98,6 +100,13 @@ if TYPE_CHECKING:
     from .client_reqrep import ConnectionKey
     from .tracing import Trace
 
+@frozen_dataclass_decorator
+class ClientTimeout:
+    total: Optional[float] = None
+    connect: Optional[float] = None
+    sock_read: Optional[float] = None
+    sock_connect: Optional[float] = None
+    ceil_threshold: float = 5
 
 class Connection:
     """Represents a single connection."""
@@ -1041,6 +1050,7 @@ class TCPConnector(BaseConnector):
 
         Has same keyword arguments as BaseEventLoop.create_connection.
         """
+
         if req.proxy:
             _, proto = await self._create_proxy_connection(req, traces, timeout)
         else:

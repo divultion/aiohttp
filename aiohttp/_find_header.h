@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-int find_header(const char *str, int size);
+int find_header(const char *str, long size);
 
 
 #ifdef __cplusplus
